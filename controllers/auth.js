@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import {createError} from "../utils/error.js"
+import {createError} from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req,res,next) => {
     try {
@@ -35,8 +36,12 @@ export const login = async (req,res,next) => {
             return next(createError(400,"Wrong password or username"));
         }
 
+        const token = jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.JWT);
+
         const {password, isAdmin, ...other} = user._doc; //dữ liệu nằm trong _doc
-        res.status(200).json({...other});
+        res.cookie("access_token",token,{
+            httpOnly: true //chỉ cho phép cookie được truyền qua giao thức HTTP hoặc HTTPS, không thể truy cập từ các ngôn ngữ khác như JavaScript.
+        }).status(200).json({...other});
     } catch (error) {
         next(error);
     }
