@@ -13,10 +13,9 @@ export const createHotel = async (req,res,next)=>{
 }
 
 export const updateHotel = async (req,res,next)=>{
-    const newHotel = new Hotel(req.body);
     
     try {
-        const updateHotel = await Hotel.findByIdAndUpdate(req.params.id,{ $set: req.body}); //add more option {new:true} if database dont change
+        const updateHotel = await Hotel.findByIdAndUpdate(req.params.id,{ $set: req.body},{new:true}); //option new:true để yêu cầu dữ liệu trả về của update là dữ liệu sau khi đc thay đổi
         res.status(200).json(updateHotel);
         
         
@@ -27,8 +26,6 @@ export const updateHotel = async (req,res,next)=>{
 
 
 export const deleteHotel = async (req,res,next)=>{
-    const newHotel = new Hotel(req.body);
-    
     try {
         await Hotel.findByIdAndDelete(req.params.id);
         res.status(200).json("Hotel has been deleted.");
@@ -41,7 +38,6 @@ export const deleteHotel = async (req,res,next)=>{
 
 
 export const getHotel = async (req,res,next)=>{
-    const newHotel = new Hotel(req.body);
     
     try {
         const hotel = await Hotel.findById(req.params.id);
@@ -54,7 +50,6 @@ export const getHotel = async (req,res,next)=>{
 }
 
 export const getHotels = async (req,res,next)=>{
-    const newHotel = new Hotel(req.body);
     
     try {
         const hotels = await Hotel.find();
