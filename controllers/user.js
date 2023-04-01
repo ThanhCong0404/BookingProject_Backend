@@ -5,7 +5,7 @@ export const updateUser = async (req,res,next)=>{
     const newUser = new User(req.body);
     
     try {
-        const updateUser = await User.findByIdAndUpdate(req.params.id,{ $set: req.body}); //add more option {new:true} if database dont change
+        const updateUser = await User.findByIdAndUpdate(req.params.id,{ $set: req.body},{new:true}); //add more option {new:true} if database dont change
         res.status(200).json(updateUser);
         
         
@@ -16,7 +16,6 @@ export const updateUser = async (req,res,next)=>{
 
 
 export const deleteUser = async (req,res,next)=>{
-    const newUser = new User(req.body);
     
     try {
         await User.findByIdAndDelete(req.params.id);
@@ -30,7 +29,6 @@ export const deleteUser = async (req,res,next)=>{
 
 
 export const getUser = async (req,res,next)=>{
-    const newUser = new User(req.body);
     
     try {
         const user = await User.findById(req.params.id);
@@ -43,7 +41,6 @@ export const getUser = async (req,res,next)=>{
 }
 
 export const getUsers = async (req,res,next)=>{
-    const newUser = new User(req.body);
     
     try {
         const users = await User.find();

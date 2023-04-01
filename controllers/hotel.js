@@ -60,3 +60,19 @@ export const getHotels = async (req,res,next)=>{
         next(error);
     }
 }
+
+//trả về list số lượng hotel theo thứ tự list tên TP
+export const countByCity = async (req,res,next)=>{
+    const cities = req.query.cities.split(","); //  ex: /hotels/countByCity?cities=HCM,HaNoi
+    
+    try {
+        const hotels = await Promise.all(cities.map(city=>{
+            return Hotel.countDocuments({city: city});
+        }))
+        res.status(200).json(hotels);
+        
+        
+    } catch (error) {
+        next(error);
+    }
+}
