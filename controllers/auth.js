@@ -10,13 +10,12 @@ export const register = async (req,res,next) => {
         const hash = bcrypt.hashSync(req.body.password,salt);
 
         const newUser = new User({
-            username : req.body.username,
-            email : req.body.email,
+            ...req.body,
             password : hash
             
         })
 
-        newUser.save();
+        await newUser.save();
         res.status(200).json("User has been created");
     } catch (error) {
         next(error);
@@ -41,7 +40,7 @@ export const login = async (req,res,next) => {
         const {password, isAdmin, ...other} = user._doc; //dữ liệu nằm trong _doc
         res.cookie("access_token",token,{
             httpOnly: true //chỉ cho phép cookie được truyền qua giao thức HTTP hoặc HTTPS, không thể truy cập từ các ngôn ngữ khác như JavaScript.
-        }).status(200).json({...other});
+        }).status(200).json({details:{...other},isAdmin});
     } catch (error) {
         next(error);
     }
